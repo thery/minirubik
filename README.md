@@ -2,6 +2,6 @@
 
 ## MiniRubik
 
-This is a certified solver for Rubix 2x2
+This is a certified solver for the Rubik 2x2
 
-The file `paper.pdf` explains the formalisation.
+The formalisation is explained in the file `paper.pdf`,
