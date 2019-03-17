@@ -7,8 +7,8 @@ This is a certified solver for the Rubik 2x2
 The formalisation is explained in the file `paper.pdf`,
 
 A position of the cube is encoded by the constructor
-``State`` that takes 7 cubes (C1, C2, C3, C4, C5, C6, C7)
-and their respective orientation (O1 O2 O3).
+``State`` that takes 7 cubes (``C1``, ``C2``, ``C3``, ``C4``, ``C5``, ``C6``, ``C7``)
+and their respective orientation (``O1`` ``O2`` ``O3``).
 
 For example, the initial configuration is
 
