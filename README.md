@@ -29,7 +29,8 @@ the initial position.
 There are 3 positive moves that corresponds to the right face, the back face and the down face.
 Each move can be applied once (`Right`, `Back`, `Down`),
 twice (`Right2`, `Back2`, `Down2`) or three times
-(`Rightm1`, `Backm1`, `Downm1`)
+(`Rightm1`, `Backm1`, `Downm1`) and is still considered
+as a single move.
 
 For example, applying the move `Right` to the initial
 configuration gives
