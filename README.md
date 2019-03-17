@@ -4,7 +4,7 @@
 
 This is a certified solver for the Rubik 2x2
 
-The formalisation is explained in the file `paper.pdf`,
+The formalisation is explained in the file [paper.pdf](https://github.com/thery/minirubik/blob/master/paper.pdf),
 
 A position of the cube is encoded by the constructor
 ``State`` that takes 7 cubes (`C1`, `C2`, `C3`, `C4`, `C5`, `C6`, `C7`)
@@ -46,4 +46,4 @@ returns a list of length 11
 ``Right :: Backm1 :: Down2 :: Rightm1 :: Back
 :: Rightm1 :: Backm1 :: Right :: Down2 :: Right :: Back :: nil``
 
-Other examples are given in the file `Example.v`
+Other examples are given in the file [Example.v](https://github.com/thery/minirubik/blob/master/Example.v)
