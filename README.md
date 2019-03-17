@@ -31,6 +31,11 @@ Each move can be applied once (`Right`, `Back`, `Down`),
 twice (`Right2`, `Back2`, `Down2`) or three times
 (`Rightm1`, `Backm1`, `Downm1`)
 
+For example, applying the move `Right` to the initial
+configuration gives
+
+``State C2 C5 C3 C1 C4 C6 C7 O2 O3 O1 O3 O2 O1 O1``
+
 For example, solving
 
 ``State C2 C1 C3 C4 C5 C6 C7 O1 O1 O1 O1 O1 O1 O1``
