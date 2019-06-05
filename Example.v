@@ -1,7 +1,7 @@
 (*
-Require Import Int31 List BasicRubik Rubik31 Solver31.
+Require Import Int31 List BasicRubik Rubik31 Solver.
 *)
-Require Import Int63 List BasicRubik Rubik63 Solver63.
+Require Import Int63 List BasicRubik Rubik63 Solver.
 
 (* Just to compute the state *)
 Time Eval native_compute in solve init_state.

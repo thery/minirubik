@@ -3,5 +3,4 @@ BasicRubik.v
 Example.v
 Rubik31.v
 Rubik63.v
-Solver31.v
-Solver63.v
+Solver.v

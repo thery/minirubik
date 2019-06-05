@@ -255,38 +255,6 @@ Proof.
 case c1; case c2; simpl; auto; intros; try discriminate.
 Qed.
 
-Let cube3_encode_aux (c0 c1 c2 : cube) : 
-  dummy positive (c0,c1,c2).
-case c0; case c1; case c2; match goal with |- dummy _ (?n0, ?n1,?n2)  =>
-  let e := eval compute in (P_of_succ_nat (30 * c2N n0 + 6 * c2N n1 + c2N n2)) in
-  exact e
-end.
-Defined.
-
-Definition cube3_encode c0 c1 c2 := Eval lazy in cube3_encode_aux c0 c1 c2.
-
-Let cube3_decode_aux (p: positive) : dummy (cube * cube * cube) p.
-revert p.
-do 6 try (intros p; case p; clear p); try (intros p; exact (C1, C1 , C1));
-match goal with |- dummy _ ?n =>
-  exact (
-  let z1 := ((Zpos n - 1) mod 6)%Z in
-  let z2 := ((Zpos n - 1) / 6)%Z in
-  let z3 := (z2 mod 5)%Z in
-  let z4 := (z2 / 5)%Z in
-    (N2c (Z.abs_nat z4), N2c (Z.abs_nat z3), N2c (Z.abs_nat z1)))
-end.
-Defined.
-
-Definition cube3_decode p := Eval lazy in  cube3_decode_aux p.
-
-Lemma cube3_encode_decode c0 c1 c2 : 
-c2N c0 - 1 = 0 -> 
-c2N c1 - 4 = 0 ->
-c2N c2 - 5 = 0 -> cube3_decode (cube3_encode c0 c1 c2) = (c0, c1, c2).
-Proof.
-case c0; case c1; case c2; simpl; auto; intros; try discriminate.
-Qed.
 
 Definition cube_eq c1 c2 := 
   match cube_compare c1 c2 with Eq => true | _ => false end.
@@ -367,6 +335,38 @@ Proof. case o; simpl; auto. Qed.
 
 Lemma odown_up o : odown (oup o) = o.
 Proof. case o; simpl; auto. Qed.
+
+Let cube3_encode_aux (o : orientation) (c1 c2 : cube) : 
+  dummy positive (o, c1, c2).
+case o; case c1; case c2; match goal with |- dummy _ (?n0, ?n1,?n2)  =>
+  let e := eval compute in (P_of_succ_nat (21 * o2N n0 + 7 * c2N n1 + c2N n2)) in
+  exact e
+end.
+Defined.
+
+Definition cube3_encode o c1 c2 := Eval lazy in cube3_encode_aux o c1 c2.
+
+Let cube3_decode_aux (p: positive) : dummy (orientation * cube * cube) p.
+revert p.
+do 6 try (intros p; case p; clear p); try (intros p; exact (O1, C1 , C1));
+match goal with |- dummy _ ?n => 
+  exact (
+  let z1 := ((Zpos n - 1) mod 7)%Z in
+  let z2 := ((Zpos n - 1) / 7)%Z in
+  let z3 := (z2 mod 3)%Z in
+  let z4 := (z2 / 3)%Z in
+    (N2o (Z.abs_nat z4), N2c (Z.abs_nat z3), N2c (Z.abs_nat z1)))
+end.
+Defined.
+
+Definition cube3_decode p := Eval lazy in cube3_decode_aux p.
+
+Lemma cube3_encode_decode o c1 c2 : 
+o2N o - 2 = 0 -> c2N c1 - 2 = 0 -> 
+cube3_decode (cube3_encode o c1 c2) = (o, c1, c2).
+Proof.
+case o; case c1; case c2; simpl; auto; intros; try discriminate.
+Qed.
 
 
 (*****************************************************************************)
