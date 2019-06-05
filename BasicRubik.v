@@ -632,8 +632,6 @@ Inductive nreachable: nat -> state -> Prop :=
 | nreachS: forall n s1 s2, 
      nreachable n s1 -> move s1 s2 -> nreachable (S n) s2.
 
-Hint Constructors nreachable.
-
 Lemma nreachable_reachable n s : nreachable n s -> reachable s.
 Proof.
 intros H; elim H; clear n s H; intros; auto.
@@ -1467,13 +1465,13 @@ assert (F1: forall s, nlreachable 0 s -> init_state = s).
   + intros n1 (Hn1, _); contradict Hn1; auto with arith.
 - split; intros s; split; auto.
   + intros [H1 | H1].
-    * subst s; exists 0; split; auto.
-    * case H1.
+    * now subst s; exists 0; split; auto; constructor.
+    * now case H1.
   + intros H1; left; apply F1.
-    exists 0; split; auto; case H1; auto.
+    now exists 0; split; auto; case H1; auto.
   + intros [H1 | H1].
-    * subst s; exists 0; split; auto.
-    * case H1.
+    * now subst s; exists 0; split; auto; constructor.
+    * now case H1.
 Qed.
 
 (* Main theorem if the second list is empty, the first list
@@ -1496,6 +1494,7 @@ case n; simpl; clear n.
 - intros n (H1, H2) s Hs.
   elim Hs.
   + exists 0; split; auto with arith.
+    now constructor.
   + intros s3 HH1 HH2.
     case (nlreachable_bound (S n) (rright s3)).
     * case HH2; intros m (Hm, Hm1).
@@ -2494,8 +2493,8 @@ assert (F1: forall s, nsreachable 0 s -> init_state = s).
 - split.
   + intros s; split; auto.
     intros [H1 | H1].
-    * subst; exists 0; repeat split; auto with arith.
-      intros m Hm; contradict Hm; auto with arith.
+    * subst; exists 0; repeat split; auto; try constructor.
+      now intros m Hm; contradict Hm; auto with arith.
     * case H1; auto.
     * intros (m1, (Hm1, (Hm2, _))); left.
       apply F1; generalize Hm1 Hm2; case m1; simpl; auto.
@@ -2508,7 +2507,7 @@ assert (F1: forall s, nsreachable 0 s -> init_state = s).
       intros n1 Hn1; contradict Hn1; auto with arith.
     * intros s; split; auto.
       intros [HH | HH]; subst; try (case HH; fail).
-      exists 0; split; auto.
+      exists 0; split; auto; constructor.
 Qed.
 
 (* Main theorem, as before (s1,s2) contains all the reachable
@@ -2798,7 +2797,8 @@ replace (get_number init_state s1 s2) with 1%positive.
       apply nsreachable_unique with init_state; auto.
       split; try apply nreach0; intros m Hm; contradict Hm; auto with arith.
     case Hk2; auto.
-   + case G1; rewrite H1; exists 0; repeat (split; auto with arith).
+   + case G1; rewrite H1; exists 0; repeat (split; auto with arith);
+       try constructor.
      intros m Hm; contradict Hm; auto with arith.
 Qed.
 
