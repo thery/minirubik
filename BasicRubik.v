@@ -189,31 +189,33 @@ Local Definition N2c n := match n with
 
 Local Definition dummy {S1 : Type} (S2 :  Type) (e : S1) := S2.
 
-Definition cube_pred c : cube := Eval lazy in
-  match c return dummy _ c with
-    C1 => C1 |
-    n => (N2c (pred (c2N n)))
-  end.
+Let cube_pred_aux (c : cube) : cube.
+change cube with (dummy cube c).
+case c; match goal with |- dummy _ ?n  =>
+  let e := eval compute in (N2c (pred (c2N n))) in
+  exact e
+end.
+Defined.
 
-Definition cube_succ c : cube := Eval lazy in
-  match c return dummy _ c with
-    C1 => C2 |
-    n => (N2c (S (c2N n)))
-  end.
+Definition cube_pred (c : cube) :=
+  Eval lazy in cube_pred_aux c.
 
-Definition cube_compare c1 c2 := Eval lazy in
-  match c1 return dummy _ c1 with
-    C1 => match c2 with C1 => Eq | _ => Lt end
-  | c1 => match c2 return dummy _ c2 with
-            C1 => Gt
-          | c2 => match (minus (c2N c1) (c2N c2)) with 
-                   O => match (minus (c2N c2) (c2N c1)) with 
-                         O => Eq | _ => Lt 
-                        end
-                  | _ => Gt
-                  end
-           end
-   end.
+Let cube_succ_aux (c : cube) : dummy cube c.
+case c; match goal with |- dummy _ ?n  =>
+  let e := eval compute in (N2c (S (c2N n))) in
+  exact e
+end.
+Defined.
+
+Definition cube_succ c := Eval lazy in cube_succ_aux c.
+
+Let cube_compare_aux (c1 c2 : cube) : dummy comparison (c1,c2).
+case c1; case c2; match goal with |- dummy _ (?n1,?n2)  =>
+  let e := eval compute in (Nat.compare (c2N n1) (c2N n2)) in
+  exact e
+end.
+Defined.
+Definition cube_compare (c1 c2 : cube) := Eval lazy in cube_compare_aux c1 c2.
 
 Lemma cube_compare_correct c1 c2 :
   match cube_compare c1 c2 with
@@ -223,34 +225,67 @@ Lemma cube_compare_correct c1 c2 :
   end.
 Proof. case c1; case c2; simpl; auto with arith. Qed.
 
-Definition cube_encode c1 c2 := Eval lazy in
-  match c1 return dummy _ c1 with
-    C1 => match c2 return dummy _ c2 with
-            C1 => 1%positive
-          | c2 => P_of_succ_nat (5 * c2N c2)
-           end
-  | c1 => match c2 return dummy _ c2 with
-            C1 => P_of_succ_nat (c2N c1)
-          | c2 => P_of_succ_nat (5 * c2N c2 + c2N c1)
-           end
-   end.
-
-Let cube_decode_aux (p: positive) : dummy (cube * cube) p.
-do 5 try (intros p; case p; clear p); try (intros p; exact (C1 , C1));
-match goal with |- dummy _ ?n =>
-  exact (
-  let z1 := ((Zpos n - 1) mod 5)%Z in
-  let z2 := ((Zpos n - 1) / 5)%Z in
-    (N2c (Z.abs_nat z1), N2c (Z.abs_nat z2)))
+Let cube_encode_aux (c1 c2 : cube) : dummy positive (c1, c2).
+case c1; case c2; match goal with |- dummy _ (?n1,?n2)  =>
+  let e := eval compute in (P_of_succ_nat (5 * c2N n2 + c2N n1)) in
+  exact e
 end.
 Defined.
 
-Definition cube_decode p := Eval lazy in  cube_decode_aux p.
+Definition cube_encode (c1 c2 : cube) :=
+ Eval lazy in cube_encode_aux c1 c2.
+
+Let cube_decode_aux (p: positive) : dummy (cube * cube) p.
+revert p.
+do 5 try (intro p; case p; clear p); try (intros p; exact (C1 , C1));
+match goal with |- dummy _ ?n =>
+  let z1 := eval compute in ((Zpos n - 1) mod 5)%Z in
+  let z2 := eval compute in ((Zpos n - 1) / 5)%Z in
+  let e := eval compute in (N2c (Z.abs_nat z1), N2c (Z.abs_nat z2)) in
+  exact e
+end.
+Defined.
+
+Definition cube_decode (p: positive) :=
+  Eval lazy in cube_decode_aux p.
 
 Lemma cube_encode_decode c1 c2 : 
  c2N c1 - 4 = 0 -> c2N c2 - 5 = 0 -> cube_decode (cube_encode c1 c2) = (c1, c2).
 Proof.
 case c1; case c2; simpl; auto; intros; try discriminate.
+Qed.
+
+Let cube3_encode_aux (c0 c1 c2 : cube) : 
+  dummy positive (c0,c1,c2).
+case c0; case c1; case c2; match goal with |- dummy _ (?n0, ?n1,?n2)  =>
+  let e := eval compute in (P_of_succ_nat (30 * c2N n0 + 6 * c2N n1 + c2N n2)) in
+  exact e
+end.
+Defined.
+
+Definition cube3_encode c0 c1 c2 := Eval lazy in cube3_encode_aux c0 c1 c2.
+
+Let cube3_decode_aux (p: positive) : dummy (cube * cube * cube) p.
+revert p.
+do 6 try (intros p; case p; clear p); try (intros p; exact (C1, C1 , C1));
+match goal with |- dummy _ ?n =>
+  exact (
+  let z1 := ((Zpos n - 1) mod 6)%Z in
+  let z2 := ((Zpos n - 1) / 6)%Z in
+  let z3 := (z2 mod 5)%Z in
+  let z4 := (z2 / 5)%Z in
+    (N2c (Z.abs_nat z4), N2c (Z.abs_nat z3), N2c (Z.abs_nat z1)))
+end.
+Defined.
+
+Definition cube3_decode p := Eval lazy in  cube3_decode_aux p.
+
+Lemma cube3_encode_decode c0 c1 c2 : 
+c2N c0 - 1 = 0 -> 
+c2N c1 - 4 = 0 ->
+c2N c2 - 5 = 0 -> cube3_decode (cube3_encode c0 c1 c2) = (c0, c1, c2).
+Proof.
+case c0; case c1; case c2; simpl; auto; intros; try discriminate.
 Qed.
 
 Definition cube_eq c1 c2 := 
@@ -268,6 +303,14 @@ Qed.
 (*****************************************************************************)
 
 Inductive orientation := O1 | O2 | O3.
+
+Definition o2N e := match e with 
+  O1 => 0 | O2 => 1 | O3 => 2
+  end.
+
+Local Definition N2o n := match n with 
+  0 => O1 | 1 => O2 | _ => O3 
+  end.
 
 Definition oup o := match o with O1 => O2 | O2 => O3 | O3 => O1 end.
 
@@ -324,6 +367,7 @@ Proof. case o; simpl; auto. Qed.
 
 Lemma odown_up o : odown (oup o) = o.
 Proof. case o; simpl; auto. Qed.
+
 
 (*****************************************************************************)
 (*                                                                           *)
