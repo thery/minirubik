@@ -1,6 +1,5 @@
 -R . minirubik
 BasicRubik.v
 Example.v
-Rubik31.v
 Rubik63.v
 Solver.v
