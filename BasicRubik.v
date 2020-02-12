@@ -183,13 +183,13 @@ Definition c2N e := match e with
   C1 => 0 | C2 => 1 | C3 => 2 | C4 => 3 | C5 => 4 | C6 => 5 | C7 => 6 
   end.
 
-Local Definition N2c n := match n with 
+Definition N2c n := match n with 
   0 => C1 | 1 => C2 | 2 => C3 | 3 => C4 | 4 => C5 | 5 => C6 | _ => C7
   end.
 
-Local Definition dummy {S1 : Type} (S2 :  Type) (e : S1) := S2.
+Definition dummy {S1 : Type} (S2 :  Type) (e : S1) := S2.
 
-Let cube_pred_aux (c : cube) : cube.
+Definition cube_pred_aux (c : cube) : cube.
 change cube with (dummy cube c).
 case c; match goal with |- dummy _ ?n  =>
   let e := eval compute in (N2c (pred (c2N n))) in
@@ -200,7 +200,7 @@ Defined.
 Definition cube_pred (c : cube) :=
   Eval lazy in cube_pred_aux c.
 
-Let cube_succ_aux (c : cube) : dummy cube c.
+Definition cube_succ_aux (c : cube) : dummy cube c.
 case c; match goal with |- dummy _ ?n  =>
   let e := eval compute in (N2c (S (c2N n))) in
   exact e
@@ -209,7 +209,7 @@ Defined.
 
 Definition cube_succ c := Eval lazy in cube_succ_aux c.
 
-Let cube_compare_aux (c1 c2 : cube) : dummy comparison (c1,c2).
+Definition cube_compare_aux (c1 c2 : cube) : dummy comparison (c1,c2).
 case c1; case c2; match goal with |- dummy _ (?n1,?n2)  =>
   let e := eval compute in (Nat.compare (c2N n1) (c2N n2)) in
   exact e
@@ -225,7 +225,7 @@ Lemma cube_compare_correct c1 c2 :
   end.
 Proof. case c1; case c2; simpl; auto with arith. Qed.
 
-Let cube_encode_aux (c1 c2 : cube) : dummy positive (c1, c2).
+Definition cube_encode_aux (c1 c2 : cube) : dummy positive (c1, c2).
 case c1; case c2; match goal with |- dummy _ (?n1,?n2)  =>
   let e := eval compute in (P_of_succ_nat (5 * c2N n2 + c2N n1)) in
   exact e
@@ -235,7 +235,7 @@ Defined.
 Definition cube_encode (c1 c2 : cube) :=
  Eval lazy in cube_encode_aux c1 c2.
 
-Let cube_decode_aux (p: positive) : dummy (cube * cube) p.
+Definition cube_decode_aux (p: positive) : dummy (cube * cube) p.
 revert p.
 do 5 try (intro p; case p; clear p); try (intros p; exact (C1 , C1));
 match goal with |- dummy _ ?n =>
@@ -276,7 +276,7 @@ Definition o2N e := match e with
   O1 => 0 | O2 => 1 | O3 => 2
   end.
 
-Local Definition N2o n := match n with 
+Definition N2o n := match n with 
   0 => O1 | 1 => O2 | _ => O3 
   end.
 
@@ -336,7 +336,7 @@ Proof. case o; simpl; auto. Qed.
 Lemma odown_up o : odown (oup o) = o.
 Proof. case o; simpl; auto. Qed.
 
-Let cube3_encode_aux (o : orientation) (c1 c2 : cube) : 
+Definition cube3_encode_aux (o : orientation) (c1 c2 : cube) : 
   dummy positive (o, c1, c2).
 case o; case c1; case c2; match goal with |- dummy _ (?n0, ?n1,?n2)  =>
   let e := eval compute in (P_of_succ_nat (21 * o2N n0 + 7 * c2N n1 + c2N n2)) in
@@ -346,7 +346,7 @@ Defined.
 
 Definition cube3_encode o c1 c2 := Eval lazy in cube3_encode_aux o c1 c2.
 
-Let cube3_decode_aux (p: positive) : dummy (orientation * cube * cube) p.
+Definition cube3_decode_aux (p: positive) : dummy (orientation * cube * cube) p.
 revert p.
 do 6 try (intros p; case p; clear p); try (intros p; exact (O1, C1 , C1));
 match goal with |- dummy _ ?n => 
