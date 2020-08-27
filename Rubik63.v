@@ -454,7 +454,7 @@ Variable f: list cube -> A.
 
 CoInductive memo_val: Type := mval:  A -> memo_val.
 
-CoFixpoint val_make (l : list cube) := mval (f (rev l)).
+Definition val_make (l : list cube) := mval (f (rev l)).
 
 CoInductive MStream: Set :=
  MSeq (a : memo_val) (m1 m2 m3 m4 m5 m6 m7: MStream).
@@ -637,13 +637,10 @@ case (phi_toZ n); intros Hn1 Hn2.
 case (phi_toZ p); intros Hp1 Hp2.
 rewrite phi_addmuldiv63; auto with zarith.
 2: rewrite phi_sub; rewrite Zmod_small; rewrite phi63; auto with zarith.
-2: split; auto with zarith.
-2: apply Z.le_lt_trans with 63%Z; auto with zarith; red; auto.
 rewrite phi0; rewrite Zmult_0_l; rewrite Zplus_0_l.
 rewrite phi_sub; rewrite phi63.
 rewrite (Zmod_small (63 - to_Z n)%Z).
 2: split; auto with zarith.
-2: apply Z.le_lt_trans with 63%Z; auto with zarith; red; auto.
 replace (63 - (63 - to_Z n))%Z with (to_Z n); auto with zarith.
 apply Z.mod_small; split; auto with zarith.
 apply Z.div_pos; auto with zarith.
@@ -686,16 +683,10 @@ assert (Z.pos p = to_Z (snd (positive_to_int p))).
   apply Z.add_lt_le_mono; auto with zarith.
   2 : apply phi_nonneg.
   apply Zmult_lt_compat2; auto with zarith.
-    split; auto with zarith.
-    apply (Pos2Z.pos_le_pos 1 _).
-    apply Pos.le_1_l.
-  split; auto with zarith.
   now compute.
 rewrite <- H.
 apply Zmod_small.
 assert (0 < Zpos p)%Z; auto with zarith.
-split; auto with zarith.
-apply Z.lt_trans with (63)%Z; auto with zarith.
 Qed.
 
 Local Definition phi_compare63 (x y: int) :
@@ -813,8 +804,7 @@ assert (F2: (to_Z (shiftr63 (shiftr63 s (p2t63 p)) 1) = to_Z s / 2 ^ (Zpos p))%Z
   repeat (rewrite phi_shiftr63; auto); rewrite phi_p2t63; auto with zarith.
   rewrite Zdiv_Zdiv; auto with zarith.
   rewrite <- Zpower_exp; try rewrite phi1; auto with zarith.
-    replace (Zpos p - 1 + 1)%Z with (Zpos p); auto with zarith.
-  assert (0 < Zpos p)%Z; auto with zarith; red; auto.
+  replace (Zpos p - 1 + 1)%Z with (Zpos p); auto with zarith.
 assert (F3: (to_Z (shiftr63 (shiftr63 s (p2t63 p)) 1) * 2 ^ to_Z 1 < 2 ^ 63)%Z).
   rewrite phi1; rewrite F2; rewrite Zpow_facts.Zpower_1_r.
   change (2^63)%Z with (2^62 * 2)%Z.
@@ -824,8 +814,6 @@ assert (F3: (to_Z (shiftr63 (shiftr63 s (p2t63 p)) 1) * 2 ^ to_Z 1 < 2 ^ 63)%Z).
   change (2 ^ 63)%Z with (2 ^ 62 * 2 ^ 1)%Z.
   apply Zmult_le_compat_l; auto with zarith.
   apply Zpow_facts.Zpower_le_monotone; auto with zarith.
-  split; auto with zarith.
-  assert (0 < Zpos p)%Z; auto with zarith; red; auto.
 assert (F4: (to_Z (p2t63 p) < 63)%Z).
   rewrite phi_p2t63; auto with zarith.
 assert (F5: (2 ^ Zpos p = 2 ^ (Zpos p - 1) * 2)%Z).
@@ -1459,13 +1447,9 @@ exists p1 : positive, (Zpos p <= Zpos p1 <= 63)%Z /\
         now case HH3; auto.
       intros [p1 [Hk1 [Hk2 Hk3]]].
       right; exists p1; split; auto with zarith.
-      split; auto with zarith.
-      now case Hk1; rewrite Zpos_succ_morphism; auto with zarith.
     intros HH; case (Hrec _ _ _ _ _ _ F1 HH); auto.
     intros [p1 [Hk1 [Hk2 Hk3]]].
     right; exists p1; split; auto with zarith.
-    split; auto with zarith.
-    case Hk1; rewrite Zpos_succ_morphism; auto with zarith.
 - intros l1 l2 c k ll H.
   case (F 62%nat 1%positive l1 l2 c k ll).
   + reflexivity.
@@ -1555,7 +1539,6 @@ assert(F:
     now apply in_or_app; right; auto with datatypes.
   now injection H4; auto.
 intros; apply F; auto with zarith.
-assert (0 < Zpos p)%Z; auto with zarith; red; auto.
 Qed.
 
 Theorem make_list63fold l1 l2 a c :
