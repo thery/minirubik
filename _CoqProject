@@ -1,5 +1,8 @@
+-arg -w -arg -native-compiler 
+-arg -w -arg yes 
 -R . minirubik
 BasicRubik.v
 Example.v
 Rubik63.v
 Solver.v
+Extract.v
