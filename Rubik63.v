@@ -23,7 +23,7 @@ Inductive tc2 := OTC2: tc2 | TC2 (_ _ : to5).
 
 (** Some 63 bits operations                                                  **)
 
-Open Scope int63_scope.
+Open Scope uint63_scope.
 
 Definition p2t63 x := snd (positive_to_int x) - 1.
 
