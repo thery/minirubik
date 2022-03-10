@@ -1,17 +1,17 @@
-<!---
-This file was generated from `meta.yml`, please do not edit manually.
-Follow the instructions on https://github.com/coq-community/templates to regenerate.
---->
-# minirubik
+# This file was generated from `meta.yml`, please do not edit manually.
+# Follow the instructions on https://github.com/coq-community/templates to regenerate.
 
-[![Docker CI][docker-action-shield]][docker-action-link]
+opam-version: "2.0"
+maintainer: "thery@sophia.inria.fr"
+version: "dev"
 
-[docker-action-shield]: https://github.com/thery/minirubik/workflows/Docker%20CI/badge.svg?branch=master
-[docker-action-link]: https://github.com/thery/minirubik/actions?query=workflow:"Docker%20CI"
+homepage: "https://github.com/thery/minirubik"
+dev-repo: "git+https://github.com/thery/minirubik.git"
+bug-reports: "https://github.com/thery/minirubik/issues"
+license: "MIT"
 
-
-
-
+synopsis: "A certified solver for the Rubik 2x2"
+description: """
 This is a certified solver for the Rubik 2x2
 
 The formalisation is explained in the file [paper.pdf](https://github.com/thery/minirubik/blob/master/paper.pdf),
@@ -56,30 +56,19 @@ returns a list of length 11
 ``Right :: Backm1 :: Down2 :: Rightm1 :: Back
 :: Rightm1 :: Backm1 :: Right :: Down2 :: Right :: Back :: nil``
 
-Other examples are given in the file [Example.v](https://github.com/thery/minirubik/blob/master/Example.v)
+Other examples are given in the file [Example.v](https://github.com/thery/minirubik/blob/master/Example.v)"""
 
-## Meta
+build: [make "-j%{jobs}%"]
+install: [make "install"]
+depends: [
+  "coq" {(>= "8.15")}
+  "coq-bignums" 
+]
 
-- Author(s):
-  - Laurent Théry
-- License: [MIT License](LICENSE)
-- Compatible Coq versions: 8.15 or later
-- Additional dependencies:
-  - [BigNums](https://github.com/coq/bignums)
-- Coq namespace: `minirubik`
-- Related publication(s): none
-
-## Building and installation instructions
-
-
-To instead build and install manually, do:
-
-``` shell
-git clone https://github.com/thery/minirubik.git
-cd minirubik
-make   # or make -j <number-of-cores-on-your-machine> 
-make install
-```
-
-
-
+tags: [
+  "keyword:mini rubik"
+  "logpath:minirubik"
+]
+authors: [
+  "Laurent Théry"
+]
