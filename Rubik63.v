@@ -1,4 +1,4 @@
-Require Import Int63 Cyclic63 List BasicRubik.
+Require Import PrimInt63 Cyclic63 List BasicRubik.
 
 (** Cubes positions. There are 7*6*5*4*3*2 positions.                        **)
 (** We code them as 6 * 5 * 4 * (3 * 3 * 7 = 63)                             **) 
@@ -30,7 +30,7 @@ Definition p2t63 x := snd (positive_to_int x) - 1.
 Definition shiftr63 x n := addmuldiv (63 - n) 0 x.
 Definition shiftl63 x n := addmuldiv n x 0.
 
-Eval native_compute in shiftr63 24 2.
+Compute shiftr63 24 2.
 
 (** Check if a given position is in a state                                  **)
 
@@ -332,8 +332,7 @@ Definition tc2it a c :=
 
 End Iter.
 
-Eval  native_compute in int63it _ (fun x l1 l2 y => y :: x) nil nil nil 2345.
-
+Compute int63it _ (fun x l1 l2 y => y :: x) nil nil nil 2345.
  
 (** Check that all states have been checked                                  **)
 
@@ -434,17 +433,17 @@ Fixpoint decode l :=
 
 (*
 
-Eval  native_compute in decode (encode (C1 :: C2 :: C3 :: nil) 3). 
+Compute decode (encode (C1 :: C2 :: C3 :: nil) 3). 
 
-Eval  native_compute in decode (encode (C1 :: C3 :: C2 :: nil) 3). 
+Compute decode (encode (C1 :: C3 :: C2 :: nil) 3). 
 
-Eval  native_compute in decode (encode (C2 :: C1 :: C3 :: nil) 3).
+Compute decode (encode (C2 :: C1 :: C3 :: nil) 3).
  
-Eval  native_compute in decode (encode (C2 :: C3 :: C1 :: nil) 3).
+Compute decode (encode (C2 :: C3 :: C1 :: nil) 3).
 
-Eval  native_compute in decode (encode (C3 :: C1 :: C2 :: nil) 3).
+Compute decode (encode (C3 :: C1 :: C2 :: nil) 3).
 
-Eval  native_compute in decode (encode (C3 :: C2 :: C1 :: nil) 3).
+Compute decode (encode (C3 :: C2 :: C1 :: nil) 3).
 *)
 
 Section Memo.
@@ -571,19 +570,19 @@ Definition iter n := iter_aux n (s0, s0).
 Definition countns n := let x := iter n in (countn (fst x), countn (snd x)).
 
 (*
-Time Eval  native_compute in countns 0.
-Time Eval  native_compute in countns 1.
-Time Eval  native_compute in countns 2.
-Time Eval  native_compute in countns 3.
-Time Eval  native_compute in countns 4.
-Time Eval  native_compute in countns 5.
-Time Eval  native_compute in countns 6.
-Time Eval  native_compute in countns 7.
-Time Eval  native_compute in countns 8.
-Time Eval  native_compute in countns 9.
-Time Eval  native_compute in countns 10. 
-Time Eval  native_compute in countns 11.
-Time Eval  native_compute in countns 12.
+Time Compute countns 0.
+Time Compute countns 1.
+Time Compute countns 2.
+Time Compute countns 3.
+Time Compute countns 4.
+Time Compute countns 5.
+Time Compute countns 6.
+Time Compute countns 7.
+Time Compute countns 8.
+Time Compute countns 9.
+Time Compute countns 10. 
+Time Compute countns 11.
+Time Compute countns 12.
 *)
 
 (*****************************************************************************)
@@ -763,7 +762,7 @@ Proof.
 case l; clear l; try (intros HH; case HH; fail).
 intros p1 l1 [Hp1 Hl1]; exists p1; exists l1; do 2 split; auto.
 generalize Hp1; case p1; simpl; auto;
- intros HH; contradict HH; apply lt_not_le; auto with arith.
+ intros HH; contradict HH; apply Nat.lt_nge; auto with arith.
 Qed.
 
 Lemma validtc4_inv l : validtc4 l ->
@@ -774,7 +773,7 @@ Proof.
 case l; clear l; try (intros HH; case HH; fail).
 intros p1 l1 [Hp1 Hl1]; exists p1; exists l1; split; auto.
 generalize Hp1; case p1; simpl; auto;
- intros HH; contradict HH; apply lt_not_le; auto with arith.
+ intros HH; contradict HH; apply Nat.lt_nge; auto with arith.
 Qed.
 
 Lemma validtc2_inv l : validtc2 l ->
@@ -783,7 +782,7 @@ Proof.
 case l; clear l; try (intros HH; case HH; fail).
 intros p1 l1 [Hp1 Hl1]; exists p1; exists l1; split; auto.
 generalize Hp1; case p1; simpl; auto;
- intros HH; contradict HH; apply lt_not_le; auto with arith.
+ intros HH; contradict HH; apply Nat.lt_nge; auto with arith.
 Qed.
 
 (*****************************************************************************)
@@ -826,7 +825,7 @@ match goal with |- context[?X ?= ?Y] =>
 end; rewrite phi_shiftl63; auto; rewrite F2; rewrite phi_shiftr63; auto with zarith;
   rewrite phi1; rewrite Zpow_facts.Zpower_1_r; rewrite phi_p2t63; auto;
   set (u := (to_Z s/ (2 ^ (Zpos p - 1)))%Z); pattern u at 1; 
-  rewrite (Z_div_mod_eq u 2%Z); auto with zarith; unfold u; rewrite Zdiv_Zdiv; 
+  rewrite (Z_div_mod_eq_full u 2%Z); auto with zarith; unfold u; rewrite Zdiv_Zdiv; 
   auto with zarith; replace (2 ^ (Zpos p - 1) * 2)%Z with (2 ^(Zpos p))%Z; auto with zarith;
   rewrite Zmult_comm; fold u; case (Z_mod_lt u 2); auto with zarith.
 Qed.
@@ -871,9 +870,9 @@ rewrite (fun x => Zmod_small x (2^63)%Z).
       -- rewrite <- Zpower_exp; auto with zarith.
          apply f_equal2 with (f := Zpower); auto; ring.
   + apply sym_equal.
-    pattern (to_Z s) at 1; rewrite (Z_div_mod_eq (to_Z s) (2 ^ Zpos p)%Z).
+    pattern (to_Z s) at 1; rewrite (Z_div_mod_eq_full (to_Z s) (2 ^ Zpos p)%Z).
     * apply f_equal2 with (f := Zplus); auto.
-      pattern (to_Z s) at 1; rewrite (Z_div_mod_eq (to_Z s) (2 ^ (Zpos p - 1))%Z).
+      pattern (to_Z s) at 1; rewrite (Z_div_mod_eq_full (to_Z s) (2 ^ (Zpos p - 1))%Z).
       -- rewrite Zplus_mod.
          replace (2 ^(Zpos p))%Z with (2^(Zpos p - 1) * (2 ^ 1))%Z.
          ++ rewrite Zmult_mod_distr_l; rewrite Zpow_facts.Zpower_1_r; rewrite H2.
@@ -882,8 +881,6 @@ rewrite (fun x => Zmod_small x (2^63)%Z).
             case (Z_mod_lt (to_Z s) (2 ^ (Zpos p - 1))%Z); auto with zarith.
          ++ rewrite <- Zpower_exp; auto with zarith.
             apply f_equal2 with (f := Zpower); auto with zarith.
-      -- apply Z.lt_gt; apply Zpow_facts.Zpower_gt_0; auto with zarith.
-    * apply Z.lt_gt; apply Zpow_facts.Zpower_gt_0; auto with zarith.
 Qed.
 
 Lemma int63aif s p q : (Zpos p <= 63)%Z -> (Zpos q <= 63)%Z ->
@@ -909,26 +906,24 @@ rewrite phi_add; rewrite phi_shiftl63; rewrite phi_p2t63;
 2: apply Zpow_facts.Zpower_lt_monotone; auto with zarith.
 assert (F : (to_Z s = 2 ^ (Zpos p) * (to_Z s / 2 ^ (Zpos p)) + 
                      (to_Z s mod (2^ (Zpos p - 1))))%Z).
-  pattern (to_Z s) at 1; rewrite (Z_div_mod_eq (to_Z s) (2 ^ Zpos p)%Z).
-    apply f_equal2 with (f := Zplus); auto.
-    pattern (to_Z s) at 1; rewrite (Z_div_mod_eq (to_Z s) (2 ^ (Zpos p - 1))%Z).
-      rewrite Zplus_mod.
-      replace (2 ^(Zpos p))%Z with (2^(Zpos p - 1) * (2 ^ 1))%Z.
-        rewrite Zmult_mod_distr_l; rewrite Zpow_facts.Zpower_1_r; rewrite H1.
-        rewrite Zmult_0_r; rewrite Zplus_0_l.
-        rewrite Zmod_mod; apply Zmod_small.
-        now case (Z_mod_lt (to_Z s) (2 ^ (Zpos p - 1))%Z); auto with zarith.
-      rewrite <- Zpower_exp; auto with zarith.
-      now apply f_equal2 with (f := Zpower); auto with zarith.
-    now apply Z.lt_gt; apply Zpow_facts.Zpower_gt_0; auto with zarith.
-  now apply Z.lt_gt; apply Zpow_facts.Zpower_gt_0; auto with zarith.
+  pattern (to_Z s) at 1; rewrite (Z_div_mod_eq_full (to_Z s) (2 ^ Zpos p)%Z).
+  apply f_equal2 with (f := Zplus); auto.
+  pattern (to_Z s) at 1; rewrite (Z_div_mod_eq_full (to_Z s) (2 ^ (Zpos p - 1))%Z).
+  rewrite Zplus_mod.
+  replace (2 ^(Zpos p))%Z with (2^(Zpos p - 1) * (2 ^ 1))%Z.
+    rewrite Zmult_mod_distr_l; rewrite Zpow_facts.Zpower_1_r; rewrite H1.
+    rewrite Zmult_0_r; rewrite Zplus_0_l.
+    rewrite Zmod_mod; apply Zmod_small.
+    now case (Z_mod_lt (to_Z s) (2 ^ (Zpos p - 1))%Z); auto with zarith.
+  rewrite <- Zpower_exp; auto with zarith.
+  now apply f_equal2 with (f := Zpower); auto with zarith.
 rewrite (fun x => Zmod_small x (2 ^ 63)%Z).
   case (Zle_or_lt (Zpos p) (Zpos q)); intros H2.
     case (Zle_lt_or_eq _ _ H2); clear H2; intros H2.
       replace (2 ^ (Zpos q - 1))%Z with (2^(Zpos p + (Zpos q - Zpos p -1)))%Z.
         rewrite Zpower_exp; try rewrite <- Zdiv_Zdiv; auto with zarith.
         pattern (to_Z s) at 1; rewrite F.
-        rewrite <- Zplus_assoc; rewrite Zplus_comm; rewrite Zmult_comm.
+        rewrite <- Zplus_assoc; rewrite Z.add_comm; rewrite Zmult_comm.
         rewrite Z_div_plus_full; auto with zarith.
           rewrite (Zdiv_small (to_Z s mod 2 ^ (Zpos p - 1) 
                     + 2 ^ (Zpos p - 1))%Z); auto with zarith.
@@ -2686,13 +2681,13 @@ Qed.
 
 Require Import Max.
 
-Definition lmax l := fold_right (fun x y => max (c2N x) y) 0%nat l.
+Definition lmax l := fold_right (fun x y => Nat.max (c2N x) y) 0%nat l.
 
-Lemma lmax_app l1 l2 :lmax (l1 ++ l2) = max (lmax l1) (lmax l2).
+Lemma lmax_app l1 l2 : lmax (l1 ++ l2) = Nat.max (lmax l1) (lmax l2).
 Proof.
 revert l2; elim l1; simpl; clear l1; auto.
 intros a l Hrec l2.
-rewrite <- max_assoc; rewrite Hrec; auto.
+rewrite <- Nat.max_assoc; rewrite Hrec; auto.
 Qed.
 
 Lemma encode_aux_id p l :
@@ -2701,9 +2696,9 @@ Proof.
 elim l; simpl; auto.
 intros a l1 Hrec Hp.
 assert (Hp1: (lmax l1 < c2N p)%nat).
-  now apply le_lt_trans with (2 := Hp); auto with arith.
+  now apply Nat.le_lt_trans with (2 := Hp); auto with arith.
 assert (Hp2: (c2N a < c2N p)%nat).
-  now apply le_lt_trans with (2 := Hp); auto with arith.
+  now apply Nat.le_lt_trans with (2 := Hp); auto with arith.
 generalize (cube_compare_correct p a); case cube_compare; intros H1.
 - apply f_equal2 with (f := @cons _); auto.
 - contradict H1; auto with zarith.
@@ -2716,14 +2711,14 @@ Proof.
 elim l; simpl; auto with zarith.
 intros a l1 Hrec.
 generalize (cube_compare_correct p a); case cube_compare; intros H.
-- apply max_case; auto with arith.
-  apply le_trans with (1 := Hrec); auto with arith.
-- apply max_case; auto with arith.
-    apply le_trans with (c2N a); auto with arith.
+- apply Nat.max_case; auto with arith.
+  apply Nat.le_trans with (1 := Hrec); auto with arith.
+- apply Nat.max_case; auto with arith.
+    apply Nat.le_trans with (c2N a); auto with arith.
     now case a; auto with arith.
-  apply le_trans with (1 := Hrec); auto with arith.
-- apply max_case; auto with arith.
-  apply le_trans with (1 := Hrec); auto with arith.
+  apply Nat.le_trans with (1 := Hrec); auto with arith.
+- apply Nat.max_case; auto with arith.
+  apply Nat.le_trans with (1 := Hrec); auto with arith.
 Qed.
 
 Lemma lmax_inv l :
@@ -2733,11 +2728,11 @@ elim l; simpl.
   now intros HH; case HH; auto with arith.
 intros c1 l1; case l1.
   intros; exists c1; split; simpl; auto.
-  now rewrite max_l; auto with arith.
+  now rewrite Nat.max_l; auto with arith.
 intros c2 l2 HH; case HH; auto.
   now intros; discriminate.
 intros c3 (Hc3, Hc4); rewrite Hc3.
-apply max_case.
+apply Nat.max_case.
   now intros; exists c1; auto.
 intros; exists c3; auto with datatypes.
 Qed.
@@ -2749,7 +2744,7 @@ Proof.
 revert l p.
 assert (F0 : forall p l, l <> nil -> unique (p :: l) -> (c2N p <= lmax l ->
                          c2N p < lmax l)%nat).
-  intros p l Hl H H1; case (le_lt_or_eq  _ _ H1); auto; intros H2.
+  intros p l Hl H H1; apply Nat.lt_eq_cases in H1; destruct H1 as [H2|H2]; auto.
   case (lmax_inv l); auto.
   intros q; rewrite <- H2; intros (H3, H4).
   inversion_clear H as [ | xx yy Ha Hb].
@@ -2761,32 +2756,32 @@ intros a l1 Hrec p _ Hp.
 generalize (cube_compare_correct p a); case cube_compare; intros Hp1 H1.
 - inversion_clear Hp as [ | xx yy Ha Hb].
   case Hb; rewrite Hp1; auto with datatypes.
-- apply max_case; auto.
-    apply lt_le_trans with (c2N a); auto with arith.
+- apply Nat.max_case; auto.
+    apply  Nat.lt_le_trans with (c2N a); auto with arith.
     now generalize Hp1; case a; auto with arith; intros HH; contradict HH; 
         auto with arith.
   generalize Hrec Hp H1 ; case l1; auto; clear l1 Hrec Hp H1.
     simpl lmax; generalize Hp1; case a; simpl; auto with arith.
     now intros HH; contradict HH; auto with arith.
   intros a1 l2 Hrec Hp H1.
-  case (le_or_lt (c2N p) (lmax (a1 :: l2))); intros H2.
-    apply lt_le_trans with (lmax (a1 :: l2)); auto with arith.
+  case (Nat.le_gt_cases (c2N p) (lmax (a1 :: l2))); intros H2.
+    apply  Nat.lt_le_trans with (lmax (a1 :: l2)); auto with arith.
     apply Hrec; auto; try (intros; discriminate).
     inversion_clear Hp as [ | xx yy Ha Hb].
     inversion_clear Ha as [ | xx1 yy1 Ha1 Hb1].
     now apply uniqC; auto with datatypes.
-  apply lt_le_trans with (c2N a); auto with arith.
-  apply le_lt_trans with (c2N p); auto with arith.
-  apply le_trans with (lmax (a1 :: l2)); auto with arith.
+  apply  Nat.lt_le_trans with (c2N a); auto with arith.
+  apply Nat.le_lt_trans with (c2N p); auto with arith.
+  apply Nat.le_trans with (lmax (a1 :: l2)); auto with arith.
   apply encode_aux_lmax_le; auto.
 - assert (H2: (c2N p <= (lmax l1))%nat).
-    now generalize H1 Hp1; apply max_case; auto with zarith.
+    now generalize H1 Hp1; apply Nat.max_case; auto with zarith.
   generalize Hrec Hp H2 ; case l1; auto; clear l1 Hrec Hp H1 H2.
     simpl lmax.
     now intros _ _ HH; contradict HH; auto with zarith.
   intros a1 l2 Hrec Hp H1.
-  rewrite (max_r (c2N a) (lmax (a1 :: l2))); auto with zarith.
-  apply max_case; auto with zarith.
+  rewrite (Nat.max_r (c2N a) (lmax (a1 :: l2))); auto with zarith.
+  apply Nat.max_case; auto with zarith.
   apply Hrec; auto with arith; try (intros; discriminate).
   inversion_clear Hp as [ | xx yy Ha Hb].
   inversion_clear Ha as [ | xx1 yy1 Ha1 Hb1].
@@ -2801,13 +2796,13 @@ Lemma encode_max n l a :
 Proof.
 revert l a; elim n; clear n.
   intros l; case l; simpl; auto.
-    intros a _ _; rewrite max_l; auto with zarith.
+    intros a _ _; rewrite Nat.max_l; auto with zarith.
     intros; apply f_equal2 with (f := @cons _); auto.
     now generalize H; case a; simpl; auto with arith;
         intros HH; contradict HH; auto with arith.
   now intros p l1 a H; contradict H; auto with arith.
 intros n Hrec l; case l; auto; clear l.
-  intros a _ _; simpl; rewrite max_l; auto with zarith.
+  intros a _ _; simpl; rewrite Nat.max_l; auto with zarith.
   now case a; simpl; auto with arith;
       intros HH; contradict HH; auto with arith.
 intros p l a H1 H2 H3.
@@ -2817,7 +2812,7 @@ change (encode (p :: l) (S n) ++ C1 :: nil) with
  (p ::  (encode (encode_aux l p) n ++ C1 :: nil)).
 apply f_equal2 with (f := @cons _); auto.
 assert (F1: (length (l ++ a :: nil) <= S n)%nat).
-  now rewrite app_length; rewrite plus_comm; auto.
+  now rewrite app_length; rewrite Nat.add_comm; auto.
 generalize F1; rewrite <- (encode_aux_length p).
 assert (F2: unique (encode_aux (l ++ a :: nil) p)).
   now apply encode_aux_unique; auto.
@@ -2839,19 +2834,19 @@ apply Hrec; unfold u.
   rewrite <- encode_aux_app.
   assert (F4:
     (lmax (encode_aux (l ++ a :: nil) p) < length (p :: l))%nat).
-    case (le_or_lt (c2N p) (lmax (l ++ a :: nil))); intros H4.
+    case (Nat.le_gt_cases (c2N p) (lmax (l ++ a :: nil))); intros H4.
       assert (F3 : (lmax (encode_aux (l ++ a :: nil) p) < lmax (l ++ a :: nil))%nat).
         apply encode_aux_lmax_lt; auto.
         now case l; intros; discriminate.
       change (lmax ((p :: l) ++ a :: nil)) with
-             (max (c2N p) (lmax (l ++ a :: nil))) in H3.
-      rewrite max_r in H3; auto.
-      now apply lt_le_trans with (1 := F3); auto.
+             (Nat.max (c2N p) (lmax (l ++ a :: nil))) in H3.
+      rewrite Nat.max_r in H3; auto.
+      now apply  Nat.lt_le_trans with (1 := F3); auto.
     rewrite encode_aux_id; auto.
-    apply lt_le_trans with (2 := H3); auto.
+    apply  Nat.lt_le_trans with (2 := H3); auto.
     change (lmax ((p :: l) ++ a :: nil)) with
-           (max (c2N p) (lmax (l ++ a :: nil))).
-    now rewrite max_l; auto with zarith.
+           (Nat.max (c2N p) (lmax (l ++ a :: nil))).
+    now rewrite Nat.max_l; auto with zarith.
   rewrite encode_aux_length.
   generalize F4; unfold length; repeat rewrite inj_S; auto with zarith.
 Qed.
@@ -2872,7 +2867,7 @@ intros n Hrec m l; case l; simpl; auto; clear l.
 intros p l H1 H2 H3.
 inversion_clear H2 as [ | xx yy Ha Hb].
 split; auto.
-  now apply le_lt_trans with (2:= H3); apply le_max_l.
+  now apply Nat.le_lt_trans with (2:= H3); apply  Nat.le_max_l.
 generalize H1 H3 Ha Hb; case l; clear l H1 H3 Ha Hb.
   now intros; case n; simpl; auto.
 intros c l H1 H3 Ha Hb.
@@ -2880,24 +2875,24 @@ apply Hrec; auto.
 - rewrite encode_aux_length; auto with arith.
 - apply encode_aux_unique; auto.
   apply uniqC; auto.
-- case (le_or_lt (c2N p) (lmax (c :: l))); intros H4.
-    rewrite max_r in H3; auto with zarith.
-    apply lt_le_trans with (lmax (c :: l)).
+- case (Nat.le_gt_cases (c2N p) (lmax (c :: l))); intros H4.
+    rewrite Nat.max_r in H3; auto with zarith.
+    apply  Nat.lt_le_trans with (lmax (c :: l)).
       apply encode_aux_lmax_lt; auto with arith.
         now intros HH; discriminate.
       now apply uniqC; auto.
     now generalize H3; case m; auto with arith.
   rewrite encode_aux_id; auto.
-  apply lt_le_trans with (1 := H4).
-  apply le_trans with (max (c2N p) (lmax (c :: l))).
-    now apply le_max_l.
+  apply  Nat.lt_le_trans with (1 := H4).
+  apply Nat.le_trans with (Nat.max (c2N p) (lmax (c :: l))).
+    now apply  Nat.le_max_l.
   generalize H3; case m; auto with arith.
 Qed.
 
 Lemma lmax_perm l1 l2 : perm l1 l2 -> lmax l1 = lmax l2.
 Proof.
 intro H; elim H; clear l1 l2 H; simpl; auto.
-  now intros a b l; repeat rewrite max_assoc; rewrite (max_comm (c2N a)); auto.
+  now intros a b l; repeat rewrite Nat.max_assoc; rewrite (Nat.max_comm (c2N a)); auto.
 intros l1 l2 l3 _ H1 _ H2; rewrite H1; auto.
 Qed.
 
@@ -2982,7 +2977,7 @@ rewrite encode_max; auto.
       now intros ox oy oz; case ox; case oy; case oz; auto.
     now repeat rewrite oadd_assoc; auto.
   case o6; auto.
-  intros pp ll; rewrite plus_comm.
+  intros pp ll; rewrite Nat.add_comm.
   now intros _ HH; inversion HH.
 simpl app; case H; intros H1 _.
 rewrite <- (lmax_perm _ _ H1); simpl; auto with arith.
@@ -3041,8 +3036,8 @@ rewrite encode_max; auto.
     repeat split; auto.
     unfold valid63; generalize Hd5; case o6; case p3; case p7; 
     intros H1 H2; try discriminate;
-    contradict H1; apply le_not_lt; simpl; auto with arith.
-  intros pp ll; rewrite plus_comm.
+    contradict H1; apply Nat.le_ngt; simpl; auto with arith.
+  intros pp ll; rewrite Nat.add_comm.
   now intros _ HH; inversion HH.
 simpl app; case H; intros H1 _.
 rewrite <- (lmax_perm _ _ H1); simpl.

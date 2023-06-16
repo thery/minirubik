@@ -286,9 +286,9 @@ Definition odown o := match o with O1 => O3 | O2 => O1 | O3 => O2 end.
 
 Definition oinv o := match o with O1 => O1 | O2 => O3 | O3 => O2 end.
 
-Definition oadd o1 o2 := match o1 with O1 => o2 | O2 => oup o2 | o3 => odown o2 end.
+Definition oadd o1 o2 := match o1 with O1 => o2 | O2 => oup o2 | O3 => odown o2 end.
 
-Definition o2Z o := match o with O1 => 0%Z | O2 => 1%Z | o3 => 2%Z end.
+Definition o2Z o := match o with O1 => 0%Z | O2 => 1%Z | O3 => 2%Z end.
 
 Definition oeq o1 o2 :=
    match o1, o2 with
@@ -505,7 +505,7 @@ split.
   repeat rewrite Zmod_mod.
   do 7 match goal with |- ?X = _  => Zmod_plus_tac X end.
   do 7 match goal with |- _ = ?X  => Zmod_plus_tac X end.
-  apply f_equal2 with (f := Zmod); auto.
+  apply f_equal2 with (f := BinIntDef.Z.modulo); auto.
   ring.
 Qed.
 
@@ -529,7 +529,7 @@ split.
   repeat rewrite Zmod_mod.
   do 7 match goal with |- ?X = _  => Zmod_plus_tac X end.
   do 7 match goal with |- _ = ?X  => Zmod_plus_tac X end.
-  apply f_equal2 with (f := Zmod); auto.
+  apply f_equal2 with (f := BinIntDef.Z.modulo); auto.
   ring.
 Qed.
 
@@ -556,7 +556,7 @@ split.
   repeat rewrite Zmod_mod.
   do 7 match goal with |- ?X = _  => Zmod_plus_tac X end.
   do 7 match goal with |- _ = ?X  => Zmod_plus_tac X end.
-  apply f_equal2 with (f := Zmod); auto.
+  apply f_equal2 with (f := BinIntDef.Z.modulo); auto.
   ring.
 Qed.
 
@@ -756,8 +756,8 @@ Definition nsreachable n s :=
 Lemma nsreachable_unique n m s : nsreachable n s -> nsreachable m s -> n = m.
 Proof.
 intros (H1, H2) (H3, H4).
-case (le_or_lt n m); intros HH0.
-- case (le_lt_or_eq _ _ HH0); clear HH0; intros HH0; auto.
+case (Nat.le_gt_cases n m); intros HH0.
+apply Nat.le_lteq in HH0; destruct HH0 as [HH0|HH0]; auto.
   case (H4 n); auto.
 - case (H2 m); auto.
 Qed.
@@ -776,7 +776,7 @@ intros n; case n; clear n.
   + intros (m, (Hm1, Hm2)).
     case (Hrec _ Hm1 _ Hm2); intros s1 (Hs1, Hs2).
     exists s1; split; auto with arith.
-    apply le_trans with (1 := Hs1); auto with arith.
+    apply Nat.le_trans with (1 := Hs1); auto with arith.
 Qed.
 
 Lemma move_nsreachable n s2 :
@@ -786,7 +786,7 @@ intros (H1, H2).
 case (move_nreachable _ _ H1); intros s1 (Hs1, Hs2).
 exists s1; split; auto.
 case (nsreachable_bound _ _ Hs2); intros m (Hm, Hm1).
-case (le_lt_or_eq _ _ Hm); clear Hm; intros Hm.
+apply Nat.le_lteq in Hm; destruct Hm as [Hm|Hm].
 - case (H2 (S m)); auto with arith.
   apply nreachS with (2 := Hs1); auto.
   case Hm1; auto.
@@ -816,7 +816,7 @@ Lemma nlreach_weak n m s :
 Proof.
 intros H (m1, (Hm1, Hm2)).
 exists m1; split; auto.
-apply le_trans with (1 := Hm1); auto.
+apply Nat.le_trans with (1 := Hm1); auto.
 Qed.
 
 Lemma nlreachable_bound n s :
@@ -824,7 +824,7 @@ Lemma nlreachable_bound n s :
 Proof.
 intros (m, (H1, H2)); case (nsreachable_bound m s); auto.
 intros p (Hp, Hp1); exists p; split; auto.
-apply le_trans with (1 := Hp); auto.
+apply Nat.le_trans with (1 := Hp); auto.
 Qed.
 
 (*****************************************************************************)
@@ -1362,7 +1362,7 @@ apply tmp; clear tmp.
   + assert (H6 := candidate_list_correct ss2 n).
     intros H7.
     case (nlreachable_bound _ _ H7); intros m (Hm, Hm1).
-    case (le_lt_or_eq _ _ Hm); intros Hm2.
+    apply Nat.le_lteq in Hm; destruct Hm as [Hm2|Hm2].
     -- left.
        assert (nlreachable n s).
          apply nlreach_weak with m; auto with arith.
@@ -1501,7 +1501,7 @@ case n; simpl; clear n.
       exists (S m); split; auto with arith.
       apply nreachS with s3; auto; unfold move; auto.
     * intros m (Hm, Hm1).
-      case (le_lt_or_eq _ _ Hm); intros Hm2.
+      apply Nat.le_lteq in Hm; destruct Hm as [Hm2|Hm2].
       -- exists m; split; auto with arith.
          case Hm1; auto.
       -- subst m; case (H2 (rright s3)); intros HH _; case (HH Hm1).
@@ -1511,7 +1511,7 @@ case n; simpl; clear n.
        exists (S m); split; auto with arith.
        apply nreachS with s3; auto; unfold move; auto.
      * intros m (Hm, Hm1).
-       case (le_lt_or_eq _ _ Hm); intros Hm2.
+       apply Nat.le_lteq in Hm; destruct Hm as [Hm2|Hm2].
        -- exists m; split; auto with arith.
           case Hm1; auto.
        -- subst m; case (H2 (rback s3)); intros HH _; case (HH Hm1).
@@ -1521,7 +1521,7 @@ case n; simpl; clear n.
        exists (S m); split; auto with arith.
        apply nreachS with s3; auto; unfold move; do 3 right; auto.
      * intros m (Hm, Hm1).
-       case (le_lt_or_eq _ _ Hm); intros Hm2.
+       apply Nat.le_lteq in Hm; destruct Hm as [Hm2|Hm2].
        exists m; split; auto with arith.
        case Hm1; auto.
        subst m; case (H2 (rdown s3)); intros HH _; case (HH Hm1).
@@ -1664,7 +1664,7 @@ rewrite inj_S; unfold Z.succ; rewrite Zplus_mod.
 rewrite <- (Zmod_mod (Z_of_nat n)  3).
 rewrite <- Zplus_mod.
 generalize (Z_mod_lt (Z_of_nat n) 3%Z (refl_equal Gt)).
-case Zmod; simpl; auto.
+case BinIntDef.Z.modulo; simpl; auto.
 2: intros p (Hp, _); contradict Hp; auto.
 do 3 (intros p; case p; simpl; auto; clear p);
  try (intros p (_, Hp); discriminate Hp).
@@ -2341,14 +2341,14 @@ split; [idtac | split].
            case (fun x => H11 x s); auto.
          intros _ H12; generalize (H12 H9); clear H11 H12; intros H11.
          case (nlreachable_bound _ _ H11); intros m (Hm, Hm1).
-         case (le_lt_or_eq _ _ Hm); intros Hm2.
+         apply Nat.le_lteq in Hm; destruct Hm as [Hm2|Hm2].
          ++ case (porder_inv1 m); intros Hm3.
             ** case H8; rewrite H2; exists m; auto with arith.
             ** case He; rewrite H1; exists m; auto with arith.
          ++ subst; exists (S n); repeat (split; auto).
   + rewrite Hn; auto.
     intros (m, (Hm1, (Hm2, Hm3))).
-    case (le_lt_or_eq _ _ Hm1); clear Hm1; intros Hm1.
+    apply Nat.le_lteq in Hm1; destruct Hm1 as [Hm1|Hm1].
     * left.
       rewrite H1; exists m; auto with arith.
     * subst; right; split; auto.
@@ -2371,14 +2371,14 @@ split; [idtac | split].
          case (fun x => H11 x s); auto.
          intros _ H12; generalize (H12 H9); clear H11 H12; intros H11.
          case (nlreachable_bound _ _ H11); intros m (Hm, Hm1).
-         case (le_lt_or_eq _ _ Hm); intros Hm2.
+         apply Nat.le_lteq in Hm; destruct Hm as [Hm2|Hm2].
          ++ case (porder_inv1 m); intros Hm3.
             ** case He; rewrite H2; exists m; auto with arith.
             ** case H8; rewrite H1; exists m; auto with arith.
          ++ subst; exists (S n); repeat (split; auto).
   + rewrite Hn; auto.
     intros (m, (Hm1, (Hm2, Hm3))).
-    case (le_lt_or_eq _ _ Hm1); clear Hm1; intros Hm1.
+    apply Nat.le_lteq in Hm1; destruct Hm1 as [Hm1|Hm1].
     * left.
       rewrite H2; exists m; auto with arith.
     * subst; right; split; auto.
@@ -2536,7 +2536,7 @@ split; auto.
   intros k Hk.
   case (nsreachable_bound _ _ Hk).
   intros m (Hm, Hm1).
-  case (le_or_lt m n); intros Hn.
+  case (Nat.le_gt_cases m n); intros Hn.
   + case (porder_inv1 m); intros H4.
     * right; rewrite H2; exists m; auto.
     * left; rewrite H1; exists m; auto.
@@ -2652,8 +2652,8 @@ assert (F1: nreachable (S n2) s1).
     case (nsreachable_bound _ _ F2); intros k1 (Hk2, Hk3).
     assert (k1 = n2); subst.
       apply nsreachable_unique with s2; auto.
-    case (le_lt_or_eq _ _ Hk); clear Hk; intros Hk; subst; auto.
-    case (le_lt_or_eq _ _ Hk2); clear Hk2; intros Hk2; subst; auto.
+    apply Nat.le_lteq in Hk; destruct Hk as [Hk|Hk]; subst; auto.
+    apply Nat.le_lteq in Hk2; destruct Hk2 as [Hk2|Hk2]; subst; auto.
     left; apply le_antisym; auto with arith.
 Qed.
 
@@ -2704,23 +2704,25 @@ generalize (get_next_aux_correct (pos_down (get_number s s1 s2)) s s1 s2 Movel);
         * case (nsreachable_bound _ _ F2); intros k2 (Hk4, Hk5).
           assert (k2 = (S n1)); subst.
             apply nsreachable_unique with (2 := Hr); auto.
-          case (le_lt_or_eq n1 k1); auto with arith; clear Hk4; 
-            intros Hk4; subst; auto.
-          case (le_lt_or_eq _ _ Hk2); clear Hk2; intros Hk2.
+          assert (Hv : n1 <= k1) by auto with zarith.
+          apply Nat.le_lteq in Hv; clear Hk4; destruct Hv as [Hk4|Hk4]; 
+            subst; auto.
+          apply Nat.le_lteq in Hk2; destruct Hk2 as [Hk2|Hk2]. 
           -- rewrite <- (Hn k1) in Ha3; auto with arith.
              ++ rewrite porderS, pos_down_up in Ha3; auto.
-                ** case (le_lt_or_eq k1 (S n1)); auto with arith.
-                   --- intros HH; contradict HH; auto with arith.
-                   --- intros HH; subst; contradict Ha3.
+                ** assert (Hv : k1 <= S n1) by auto with zarith.
+                   apply Nat.le_lteq in Hv; destruct Hv as [HH|HH].
+                   --- contradict HH; auto with arith.
+                   --- subst; contradict Ha3.
                        rewrite porderS.
                        case (porder n1); simpl; auto;
                          try (intros; discriminate).
                        intros p; case p; intros; discriminate.
                 ** generalize (porder_inv n1); intros [HH1|[HH1|HH1]]; 
                      rewrite HH1; red; auto.
-             ++ apply le_trans with (S n1); auto with arith.
+             ++ apply Nat.le_trans with (S n1); auto with arith.
           -- subst k1; clear F1 F2.
-             case (le_or_lt (S (S n1)) n); intros Hk6.
+             case (Nat.le_gt_cases (S (S n1)) n); intros Hk6.
              ++ rewrite <- (Hn (S (S n1))) in Ha3; auto with arith.
                 contradict Ha3; repeat rewrite porderS.
                 case (porder n1); simpl; auto; try (intros; discriminate).
@@ -2808,7 +2810,7 @@ Lemma solve_correct n m p s s1 s2 :
   nsreachable (m - p) (fold_left (fun s a => m2f a s) (solve p s s1 s2) s).
 Proof.
 intro H; generalize m s; elim p; clear m p s; simpl; auto.
-intros m; rewrite <- minus_n_O; auto.
+intros m; rewrite Nat.sub_0_r; auto.
 intros p Hrec m; case m; clear m; simpl.
 - intros s _ HH; case HH; intros HH1 _; inversion_clear HH1.
   rewrite get_next_init with (1 := H).
@@ -2833,8 +2835,9 @@ case (nlreachable_bound _ _ H2); clear H2; intros m (H2, H3).
 generalize (solve_correct n m n s s1 s2 H1 H2 H3).
 replace (m - n) with 0.
 - intros (HH,_); inversion HH; auto.
-- case (le_lt_or_eq _ _ H2); intros HH; subst; auto with arith.
-  rewrite not_le_minus_0; auto with arith.
+- apply Nat.lt_eq_cases in H2; destruct H2; subst; auto with arith.
+apply Nat.lt_le_incl in H.
+apply Nat.sub_0_le in H; auto with arith.
 Qed.
 
 (* Main theorem: and the path is "small"*)

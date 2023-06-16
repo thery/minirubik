@@ -63,7 +63,7 @@ Other examples are given in the file [Example.v](https://github.com/thery/miniru
 - Author(s):
   - Laurent Théry
 - License: [MIT License](LICENSE)
-- Compatible Coq versions: 8.15 or later
+- Compatible Coq versions: 8.17 or later
 - Additional dependencies:
   - [BigNums](https://github.com/coq/bignums)
 - Coq namespace: `minirubik`
@@ -71,8 +71,7 @@ Other examples are given in the file [Example.v](https://github.com/thery/miniru
 
 ## Building and installation instructions
 
-
-To instead build and install manually, do:
+To build and install manually, do:
 
 ``` shell
 git clone https://github.com/thery/minirubik.git
