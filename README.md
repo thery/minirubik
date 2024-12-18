@@ -6,8 +6,8 @@ Follow the instructions on https://github.com/coq-community/templates to regener
 
 [![Docker CI][docker-action-shield]][docker-action-link]
 
-[docker-action-shield]: https://github.com/thery/minirubik/workflows/Docker%20CI/badge.svg?branch=master
-[docker-action-link]: https://github.com/thery/minirubik/actions?query=workflow:"Docker%20CI"
+[docker-action-shield]: https://github.com/thery/minirubik/actions/workflows/docker-action.yml/badge.svg?branch=master
+[docker-action-link]: https://github.com/thery/minirubik/actions/workflows/docker-action.yml
 
 
 
@@ -63,7 +63,7 @@ Other examples are given in the file [Example.v](https://github.com/thery/miniru
 - Author(s):
   - Laurent Théry
 - License: [MIT License](LICENSE)
-- Compatible Coq versions: 8.17 or later
+- Compatible Coq versions: 8.20 or later
 - Additional dependencies:
   - [BigNums](https://github.com/coq/bignums)
 - Coq namespace: `minirubik`
@@ -71,7 +71,15 @@ Other examples are given in the file [Example.v](https://github.com/thery/miniru
 
 ## Building and installation instructions
 
-To build and install manually, do:
+The easiest way to install the latest released version of minirubik
+is via [OPAM](https://opam.ocaml.org/doc/Install.html):
+
+```shell
+opam repo add coq-released https://coq.inria.fr/opam/released
+opam install coq-minirubik
+```
+
+To instead build and install manually, do:
 
 ``` shell
 git clone https://github.com/thery/minirubik.git

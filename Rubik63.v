@@ -494,8 +494,8 @@ Proof.
 revert l1.
 assert (H : forall l1 l2, memo_get_val l1 (memo_make l2) = f (rev l2 ++ l1)).
   induction l1 as [ | a l1 Hrec].
-    intros l2; rewrite <- app_nil_end; auto.
-  intros l2; case a; clear a; simpl; rewrite Hrec; simpl; rewrite app_ass; auto.
+    intros l2; rewrite app_nil_r; auto.
+  intros l2; case a; clear a; simpl; rewrite Hrec; simpl; rewrite <- app_assoc; auto.
 intros l1; rewrite H; auto.
 Qed.
 
@@ -1673,9 +1673,9 @@ case c.
 intros cc1 cc2 cc3 cc4 cc5 cc6; unfold tc6it.
 repeat rewrite make_list63fold.
 repeat rewrite <- fold_left_app.
-repeat rewrite <- app_ass.
+repeat rewrite app_assoc.
 repeat rewrite <- make_list63irA.
-repeat rewrite <- app_nil_end.
+repeat rewrite app_nil_r.
 reflexivity.
 Qed.
 
@@ -1702,7 +1702,7 @@ case (make_listtc6i _ _ _ _ _ H); clear H; unfold ll4; intros H.
          case H; intros l3 (p, (Hp1, (Hp2, (Hp3, Hp4)))).
          right; rewrite Hp1.
          exists (l3 ++ (C5 :: nil)); exists p; split.
-           now rewrite app_ass; reflexivity.
+           now rewrite <- app_assoc; reflexivity.
          split.
           now rewrite rev_unit; unfold validtc5, valid63; auto.
          split; auto.
@@ -1710,7 +1710,7 @@ case (make_listtc6i _ _ _ _ _ H); clear H; unfold ll4; intros H.
       -- case H; intros l3 (p, (Hp1, (Hp2, (Hp3, Hp4)))).
          right; rewrite Hp1.
          exists (l3 ++ (C4 :: nil)); exists p; split.
-           now rewrite app_ass; reflexivity.
+           now rewrite <- app_assoc; reflexivity.
          split.
            now rewrite rev_unit; unfold validtc5, valid63; auto.
          split; auto.
@@ -1718,7 +1718,7 @@ case (make_listtc6i _ _ _ _ _ H); clear H; unfold ll4; intros H.
     * case H; intros l3 (p, (Hp1, (Hp2, (Hp3, Hp4)))).
       right; rewrite Hp1.
       exists (l3 ++ (C3 :: nil)); exists p; split.
-        now rewrite app_ass; reflexivity.
+        now rewrite <- app_assoc; reflexivity.
       split.
         now rewrite rev_unit; unfold validtc5, valid63; auto.
       split; auto.
@@ -1726,7 +1726,7 @@ case (make_listtc6i _ _ _ _ _ H); clear H; unfold ll4; intros H.
   + case H; intros l3 (p, (Hp1, (Hp2, (Hp3, Hp4)))).
     right; rewrite Hp1.
     exists (l3 ++ (C2 :: nil)); exists p; split.
-      now rewrite app_ass; reflexivity.
+      now rewrite <- app_assoc; reflexivity.
     split.
       now rewrite rev_unit; unfold validtc5, valid63; auto with arith.
     split; auto.
@@ -1734,7 +1734,7 @@ case (make_listtc6i _ _ _ _ _ H); clear H; unfold ll4; intros H.
 - case H; intros l3 (p, (Hp1, (Hp2, (Hp3, Hp4)))).
   right; rewrite Hp1.
   exists (l3 ++ (C1 :: nil)); exists p; split.
-    rewrite app_ass; reflexivity.
+    rewrite <- app_assoc; reflexivity.
   rewrite rev_unit; auto.
   split; auto; split; auto with arith.
 Qed.
@@ -1768,7 +1768,7 @@ rewrite HH; simpl rev; clear HH.
 rewrite rev_unit; rewrite rev_involutive;
 case HH1; [intros HH2 | intros [HH2 | [HH2 | [HH2 | HH2]]]];
   rewrite HH2; clear HH1 HH2; simpl; intros HH;
-  rewrite app_ass; simpl app.
+  rewrite <- app_assoc; simpl app.
 - apply  make_listtc6ir; auto; rewrite rev_involutive; auto.
 - apply  make_listtc6irI; apply make_listtc6ir; auto; rewrite rev_involutive; auto.
 - do 2 (apply  make_listtc6irI); 
@@ -1788,9 +1788,9 @@ case c.
 intros cc1 cc2 cc3 cc4 cc5; unfold tc5it.
 repeat rewrite make_listtc6fold.
 repeat rewrite <- fold_left_app.
-repeat rewrite <- app_ass.
+repeat rewrite app_assoc.
 repeat rewrite <- make_listtc6irA.
-repeat rewrite <- app_nil_end.
+repeat rewrite app_nil_r.
 reflexivity.
 Qed.
 
@@ -1816,7 +1816,7 @@ case (make_listtc5i _ _ _ _ _ H); clear H; unfold ll4; intros H.
       case H; intros l3 (p, (Hp1, (Hp2, (Hp3, Hp4)))).
       right; rewrite Hp1.
       exists (l3 ++ (C4 :: nil)); exists p; split.
-        now rewrite app_ass; reflexivity.
+        now rewrite <- app_assoc; reflexivity.
       split.
         now rewrite rev_unit; unfold validtc4, valid63; auto.
       split; auto.
@@ -1824,7 +1824,7 @@ case (make_listtc5i _ _ _ _ _ H); clear H; unfold ll4; intros H.
     * case H; intros l3 (p, (Hp1, (Hp2, (Hp3, Hp4)))).
       right; rewrite Hp1.
       exists (l3 ++ (C3 :: nil)); exists p; split.
-        now rewrite app_ass; reflexivity.
+        now rewrite <- app_assoc; reflexivity.
       split.
         now rewrite rev_unit; unfold validtc4, valid63; auto.
       split; auto.
@@ -1832,7 +1832,7 @@ case (make_listtc5i _ _ _ _ _ H); clear H; unfold ll4; intros H.
   + case H; intros l3 (p, (Hp1, (Hp2, (Hp3, Hp4)))).
     right; rewrite Hp1.
     exists (l3 ++ (C2 :: nil)); exists p; split.
-      now rewrite app_ass; reflexivity.
+      now rewrite <- app_assoc; reflexivity.
     split.
       now rewrite rev_unit; unfold validtc4, valid63; auto.
     split; auto.
@@ -1840,7 +1840,7 @@ case (make_listtc5i _ _ _ _ _ H); clear H; unfold ll4; intros H.
 - case H; intros l3 (p, (Hp1, (Hp2, (Hp3, Hp4)))).
   right; rewrite Hp1.
   exists (l3 ++ (C1 :: nil)); exists p; split.
-    rewrite app_ass; reflexivity.
+    rewrite <- app_assoc; reflexivity.
   rewrite rev_unit; auto.
   split; auto; split; auto.
 Qed.
@@ -1874,7 +1874,7 @@ rewrite HH; simpl rev; clear HH.
 rewrite rev_unit; rewrite rev_involutive;
 case HH1; [intros HH2 | intros [HH2 | [HH2 | HH2]]];
   rewrite HH2; clear HH1 HH2; simpl; intros HH;
-  rewrite app_ass; simpl app.
+  rewrite <- app_assoc; simpl app.
 - apply  make_listtc5ir; auto; rewrite rev_involutive; auto.
 - apply  make_listtc5irI; apply make_listtc5ir; auto; rewrite rev_involutive; auto.
 - do 2 (apply  make_listtc5irI); 
@@ -1892,9 +1892,9 @@ case c.
 intros cc1 cc2 cc3 cc4; unfold tc4it.
 repeat rewrite make_listtc5fold.
 repeat rewrite <- fold_left_app.
-repeat rewrite <- app_ass.
+repeat rewrite app_assoc.
 repeat rewrite <- make_listtc5irA.
-repeat rewrite <- app_nil_end.
+repeat rewrite app_nil_r.
 reflexivity.
 Qed.
 
@@ -1954,7 +1954,7 @@ case c.
 intros cc1 cc2 cc3 Hl1 Hl2 Hp.
 generalize Hl2; case l2; try (intros; discriminate).
 simpl rev; intros o1 l5; case l5; clear l5.
-2: intros o2 l5; unfold validto1; simpl rev; repeat rewrite app_length; simpl length;
+2: intros o2 l5; unfold validto1; simpl rev; repeat rewrite length_app; simpl length;
    repeat rewrite <-plus_n_Sm; intros; discriminate.
 simpl app; intros _; case o1; simpl; intros HH.
 - apply  make_listtc4ir; auto.
@@ -1971,9 +1971,9 @@ case c.
 intros cc1 cc2 cc3; unfold to1it.
 repeat rewrite make_listtc4fold.
 repeat rewrite <- fold_left_app.
-repeat rewrite <- app_ass.
+repeat rewrite app_assoc.
 repeat rewrite <- make_listtc4irA.
-repeat rewrite <- app_nil_end.
+repeat rewrite app_nil_r.
 reflexivity.
 Qed.
 
@@ -1996,19 +1996,19 @@ case (make_listto1i _ _ _ _ _ H); clear H; unfold ll3; intros H.
       now left; assumption.
     case H; intros l3 (l4, (p, (Hp1, (Hp2, (Hp3, (Hp4, Hp5)))))).
     right; rewrite Hp1.
-    exists l3; exists (l4 ++ (O3 :: nil)); exists p; split; [rewrite app_ass | split]; 
+    exists l3; exists (l4 ++ (O3 :: nil)); exists p; split; [rewrite <- app_assoc | split]; 
     auto; rewrite rev_unit.
     split; [red; auto | split; auto].
     simpl; red in Hp3; rewrite Hp3; auto.
   + case H; intros l3 (l4, (p, (Hp1, (Hp2, (Hp3, (Hp4, Hp5)))))).
     right; rewrite Hp1.
-    exists l3; exists (l4 ++ (O2 :: nil)); exists p; split; [rewrite app_ass | split]; 
+    exists l3; exists (l4 ++ (O2 :: nil)); exists p; split; [rewrite <- app_assoc | split]; 
     auto; rewrite rev_unit.
     split; [red; auto | split; auto].
     simpl; red in Hp3; rewrite Hp3; auto.
 - case H; intros l3 (l4, (p, (Hp1, (Hp2, (Hp3, (Hp4, Hp5)))))).
   right; rewrite Hp1.
-  exists l3; exists (l4 ++ (O1 :: nil)); exists p; split; [rewrite app_ass | split]; 
+  exists l3; exists (l4 ++ (O1 :: nil)); exists p; split; [rewrite <- app_assoc | split]; 
   auto; rewrite rev_unit.
   split; [red; auto | split; auto].
   simpl; red in Hp3; rewrite Hp3; auto.
@@ -2040,7 +2040,7 @@ intros cc1 cc2 cc3 Hl1 Hl2 Hp.
 pattern l2 at 2; rewrite <- (rev_involutive l2).
 generalize Hl2; case (rev l2); try (intros; discriminate).
 simpl rev; intros o1 l5; case o1; clear o1; intros Hl5;
-  simpl; intros HH; rewrite app_ass.
+  simpl; intros HH; rewrite <- app_assoc.
 - apply  make_listto1ir; auto; rewrite rev_involutive; injection Hl5; auto.
 - apply  make_listto1irI; apply make_listto1ir; auto;
   rewrite rev_involutive; injection Hl5; auto.
@@ -2057,9 +2057,9 @@ case c.
 intros cc1 cc2 cc3; unfold to2it.
 repeat rewrite make_listto1fold.
 repeat rewrite <- fold_left_app.
-repeat rewrite <- app_ass.
+repeat rewrite app_assoc.
 repeat rewrite <- make_listto1irA.
-repeat rewrite <- app_nil_end.
+repeat rewrite app_nil_r.
 reflexivity.
 Qed.
 
@@ -2083,19 +2083,19 @@ case (make_listto2i _ _ _ _ _ H); clear H; unfold ll3; intros H.
     case H; intros l3 (l4, (p, (Hp1, (Hp2, (Hp3, (Hp4, Hp5)))))).
     right; rewrite Hp1.
     exists l3; exists (l4 ++ (O3 :: nil)); exists p; split;
-      [rewrite app_ass | split]; 
+      [rewrite <- app_assoc | split]; 
     auto; rewrite rev_unit.
     split; [red; auto | split; auto].
     simpl; red in Hp3; rewrite Hp3; auto.
   + case H; intros l3 (l4, (p, (Hp1, (Hp2, (Hp3, (Hp4, Hp5)))))).
     right; rewrite Hp1.
-    exists l3; exists (l4 ++ (O2 :: nil)); exists p; split; [rewrite app_ass | split]; 
+    exists l3; exists (l4 ++ (O2 :: nil)); exists p; split; [rewrite <- app_assoc | split]; 
     auto; rewrite rev_unit.
     split; [red; auto | split; auto].
     simpl; red in Hp3; rewrite Hp3; auto.
 - case H; intros l3 (l4, (p, (Hp1, (Hp2, (Hp3, (Hp4, Hp5)))))).
   right; rewrite Hp1.
-  exists l3; exists (l4 ++ (O1 :: nil)); exists p; split; [rewrite app_ass | split]; 
+  exists l3; exists (l4 ++ (O1 :: nil)); exists p; split; [rewrite <- app_assoc | split]; 
   auto; rewrite rev_unit.
   split; [red; auto | split; auto].
   simpl; red in Hp3; rewrite Hp3; auto.
@@ -2127,7 +2127,7 @@ intros cc1 cc2 cc3 Hl1 Hl2 Hp.
 pattern l2 at 2; rewrite <- (rev_involutive l2).
 generalize Hl2; case (rev l2); try (intros; discriminate).
 simpl rev; intros o1 l5; case o1; clear o1; intros Hl5;
-  simpl; intros HH; rewrite app_ass.
+  simpl; intros HH; rewrite <- app_assoc.
 - apply  make_listto2ir; auto; rewrite rev_involutive; injection Hl5; auto.
 - apply  make_listto2irI; apply make_listto2ir; auto;
   rewrite rev_involutive; injection Hl5; auto.
@@ -2144,9 +2144,9 @@ case c.
 intros cc1 cc2 cc3; unfold to3it.
 repeat rewrite make_listto2fold.
 repeat rewrite <- fold_left_app.
-repeat rewrite <- app_ass.
+repeat rewrite app_assoc.
 repeat rewrite <- make_listto2irA.
-repeat rewrite <- app_nil_end.
+repeat rewrite app_nil_r.
 reflexivity.
 Qed.
 
@@ -2169,19 +2169,19 @@ case (make_listto3i _ _ _ _ _ H); clear H; unfold ll3; intros H.
       now left; assumption.
     case H; intros l3 (l4, (p, (Hp1, (Hp2, (Hp3, (Hp4, Hp5)))))).
     right; rewrite Hp1.
-    exists l3; exists (l4 ++ (O3 :: nil)); exists p; split; [rewrite app_ass | split]; 
+    exists l3; exists (l4 ++ (O3 :: nil)); exists p; split; [rewrite <- app_assoc | split]; 
     auto; rewrite rev_unit.
     split; [red; auto | split; auto].
     simpl; red in Hp3; rewrite Hp3; auto.
   + case H; intros l3 (l4, (p, (Hp1, (Hp2, (Hp3, (Hp4, Hp5)))))).
     right; rewrite Hp1.
-    exists l3; exists (l4 ++ (O2 :: nil)); exists p; split; [rewrite app_ass | split]; 
+    exists l3; exists (l4 ++ (O2 :: nil)); exists p; split; [rewrite <- app_assoc | split]; 
       auto; rewrite rev_unit.
     split; [red; auto | split; auto].
     simpl; red in Hp3; rewrite Hp3; auto.
 - case H; intros l3 (l4, (p, (Hp1, (Hp2, (Hp3, (Hp4, Hp5)))))).
   right; rewrite Hp1.
-  exists l3; exists (l4 ++ (O1 :: nil)); exists p; split; [rewrite app_ass | split]; 
+  exists l3; exists (l4 ++ (O1 :: nil)); exists p; split; [rewrite <- app_assoc | split]; 
   auto; rewrite rev_unit.
   split; [red; auto | split; auto].
   simpl; red in Hp3; rewrite Hp3; auto.
@@ -2213,7 +2213,7 @@ intros cc1 cc2 cc3 Hl1 Hl2 Hp.
 pattern l2 at 2; rewrite <- (rev_involutive l2).
 generalize Hl2; case (rev l2); try (intros; discriminate).
 simpl rev; intros o1 l5; case o1; clear o1; intros Hl5;
-  simpl; intros HH; rewrite app_ass.
+  simpl; intros HH; rewrite <- app_assoc.
 - apply  make_listto3ir; auto; rewrite rev_involutive; injection Hl5; auto.
 - apply  make_listto3irI; apply make_listto3ir; auto;
   rewrite rev_involutive; injection Hl5; auto.
@@ -2230,9 +2230,9 @@ case c.
 intros cc1 cc2 cc3; unfold to4it.
 repeat rewrite make_listto3fold.
 repeat rewrite <- fold_left_app.
-repeat rewrite <- app_ass.
+repeat rewrite app_assoc.
 repeat rewrite <- make_listto3irA.
-repeat rewrite <- app_nil_end.
+repeat rewrite app_nil_r.
 reflexivity.
 Qed.
 
@@ -2255,19 +2255,19 @@ case (make_listto4i _ _ _ _ _ H); clear H; unfold ll3; intros H.
     now left; assumption.
     case H; intros l3 (l4, (p, (Hp1, (Hp2, (Hp3, (Hp4, Hp5)))))).
     right; rewrite Hp1.
-    exists l3; exists (l4 ++ (O3 :: nil)); exists p; split; [rewrite app_ass | split]; 
+    exists l3; exists (l4 ++ (O3 :: nil)); exists p; split; [rewrite <- app_assoc | split]; 
     auto; rewrite rev_unit.
     split; [red; auto | split; auto].
     simpl; red in Hp3; rewrite Hp3; auto.
   + case H; intros l3 (l4, (p, (Hp1, (Hp2, (Hp3, (Hp4, Hp5)))))).
     right; rewrite Hp1.
-    exists l3; exists (l4 ++ (O2 :: nil)); exists p; split; [rewrite app_ass | split]; 
+    exists l3; exists (l4 ++ (O2 :: nil)); exists p; split; [rewrite <- app_assoc | split]; 
     auto; rewrite rev_unit.
     split; [red; auto | split; auto].
     simpl; red in Hp3; rewrite Hp3; auto.
 - case H; intros l3 (l4, (p, (Hp1, (Hp2, (Hp3, (Hp4, Hp5)))))).
   right; rewrite Hp1.
-  exists l3; exists (l4 ++ (O1 :: nil)); exists p; split; [rewrite app_ass | split]; 
+  exists l3; exists (l4 ++ (O1 :: nil)); exists p; split; [rewrite <- app_assoc | split]; 
   auto; rewrite rev_unit.
   split; [red; auto | split; auto].
   simpl; red in Hp3; rewrite Hp3; auto.
@@ -2299,7 +2299,7 @@ intros cc1 cc2 cc3 Hl1 Hl2 Hp.
 pattern l2 at 2; rewrite <- (rev_involutive l2).
 generalize Hl2; case (rev l2); try (intros; discriminate).
 simpl rev; intros o1 l5; case o1; clear o1; intros Hl5;
-  simpl; intros HH; rewrite app_ass.
+  simpl; intros HH; rewrite <- app_assoc.
 - apply  make_listto4ir; auto; rewrite rev_involutive; injection Hl5; auto.
 - apply  make_listto4irI; apply make_listto4ir; auto;
   rewrite rev_involutive; injection Hl5; auto.
@@ -2316,9 +2316,9 @@ case c.
 intros cc1 cc2 cc3; unfold to5it.
 repeat rewrite make_listto4fold.
 repeat rewrite <- fold_left_app.
-repeat rewrite <- app_ass.
+repeat rewrite app_assoc.
 repeat rewrite <- make_listto4irA.
-repeat rewrite <- app_nil_end.
+repeat rewrite app_nil_r.
 reflexivity.
 Qed.
 
@@ -2340,7 +2340,7 @@ case (make_listto5i _ _ _ _ _ H); clear H; unfold ll2; intros H.
   case H; intros l3 (l4, (p, (Hp1, (Hp2, (Hp3, (Hp4, Hp5)))))).
   right; rewrite Hp1.
   exists (l3 ++ (C2 :: nil)); exists l4; exists p; split.
-    now rewrite <- app_nil_end; reflexivity.
+    now rewrite app_nil_r; reflexivity.
   split.
   rewrite rev_unit; unfold validtc2, valid63; auto.
   split; [idtac | split]; auto.
@@ -2348,7 +2348,7 @@ case (make_listto5i _ _ _ _ _ H); clear H; unfold ll2; intros H.
 - case H; intros l3 (l4, (p, (Hp1, (Hp2, (Hp3, (Hp4, Hp5)))))).
   right; rewrite Hp1.
   exists (l3 ++ (C1 :: nil)); exists l4; exists p; split.
-  rewrite <- app_nil_end; reflexivity.
+  rewrite app_nil_r; reflexivity.
   split.
   rewrite rev_unit; unfold validtc2, valid63; auto.
   split; [idtac | split]; auto.
@@ -2384,7 +2384,7 @@ case HH1; intros HH2;
   rewrite HH2 in HH |- *; clear HH1 HH2; simpl; intros HH3;
   simpl app;
   rewrite <- (rev_involutive l1); rewrite HH; simpl rev;
-  rewrite (app_nil_end l2).
+  rewrite <- (app_nil_r l2).
   now apply  make_listto5ir; auto; rewrite rev_involutive; auto.
 apply  make_listto5irI; apply make_listto5ir; auto; rewrite rev_involutive; auto.
 Qed.
@@ -2397,9 +2397,9 @@ case c.
 intros cc1 cc2; unfold tc2it.
 repeat rewrite make_listto5fold.
 repeat rewrite <- fold_left_app.
-repeat rewrite <- app_ass.
+repeat rewrite app_assoc.
 repeat rewrite <- make_listto5irA.
-repeat rewrite <- app_nil_end.
+repeat rewrite app_nil_r.
 reflexivity.
 Qed.
 
@@ -2679,8 +2679,6 @@ rewrite <- Hrec.
 - apply encode_aux_unique; auto.
 Qed.
 
-Require Import Max.
-
 Definition lmax l := fold_right (fun x y => Nat.max (c2N x) y) 0%nat l.
 
 Lemma lmax_app l1 l2 : lmax (l1 ++ l2) = Nat.max (lmax l1) (lmax l2).
@@ -2812,7 +2810,7 @@ change (encode (p :: l) (S n) ++ C1 :: nil) with
  (p ::  (encode (encode_aux l p) n ++ C1 :: nil)).
 apply f_equal2 with (f := @cons _); auto.
 assert (F1: (length (l ++ a :: nil) <= S n)%nat).
-  now rewrite app_length; rewrite Nat.add_comm; auto.
+  now rewrite length_app; rewrite Nat.add_comm; auto.
 generalize F1; rewrite <- (encode_aux_length p).
 assert (F2: unique (encode_aux (l ++ a :: nil) p)).
   now apply encode_aux_unique; auto.
@@ -2822,7 +2820,7 @@ intros G1 G2.
 set (u := encode_aux l p); simpl encode_aux.
 apply Hrec; unfold u.
 - rewrite encode_aux_length.
-  apply le_S_n; generalize F1; rewrite app_length; auto.
+  apply le_S_n; generalize F1; rewrite length_app; auto.
 - assert (F3: unique (encode_aux (l ++ a :: nil) p)).
     now apply encode_aux_unique; auto.
   generalize F3; rewrite encode_aux_app; auto.
@@ -2961,7 +2959,7 @@ rewrite encode_max; auto.
   intros p2 l Hp; unfold rev, app, decode_state.
   match type of Hp with _ = decode ?X =>
     generalize (decode_length X); rewrite <- Hp;
-    simpl length; repeat rewrite app_length;  simpl length
+    simpl length; repeat rewrite length_app;  simpl length
   end.
   generalize Hp; case l; simpl length; simpl app; clear Hp.
     intros Hp _ (Hd1, (Hd2, (Hd3, (Hd4, (Hd5, (Hd6, _)))))).
@@ -3029,7 +3027,7 @@ rewrite encode_max; auto.
   intros p2 l Hp; unfold rev, app, decode_state.
   match type of Hp with _ = decode ?X =>
     generalize (decode_length X); rewrite <- Hp;
-    simpl length; repeat rewrite app_length;  simpl length
+    simpl length; repeat rewrite length_app;  simpl length
   end.
   generalize Hp; case l; simpl length; simpl app; clear Hp.
     intros Hp _ (Hd1, (Hd2, (Hd3, (Hd4, (Hd5, (Hd6, _)))))).

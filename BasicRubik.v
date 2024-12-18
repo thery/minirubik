@@ -954,7 +954,7 @@ Proof.
 revert l2; elim l1; unfold candidate_list; clear l1.
 - simpl; auto.
 - intros a l1 Hrec l2; rewrite fold_right_cons.
-  rewrite app_ass, <- Hrec; auto.
+  rewrite <- app_assoc, <- Hrec; auto.
 Qed.
 
 Lemma candidate_in a l :
@@ -2452,7 +2452,7 @@ Lemma iter2s_aux_nreach n p m ps :
 Proof.
 revert p m ps; elim n; auto; clear n.
 intros n Hrec p m (ss1, ss2); simpl fst; simpl snd.
-rewrite plus_Snm_nSm.
+rewrite Nat.add_succ_comm.
 intros H1 (H2, (H3, H4)); apply (Hrec (pos_up p) (S m)).
 rewrite H1; repeat rewrite porderS; auto.
 apply (fold_next2s_nreach m p (ss1, ss2)); auto.
@@ -2654,7 +2654,7 @@ assert (F1: nreachable (S n2) s1).
       apply nsreachable_unique with s2; auto.
     apply Nat.le_lteq in Hk; destruct Hk as [Hk|Hk]; subst; auto.
     apply Nat.le_lteq in Hk2; destruct Hk2 as [Hk2|Hk2]; subst; auto.
-    left; apply le_antisym; auto with arith.
+    left; apply Nat.le_antisymm; auto with arith.
 Qed.
 
 Lemma porder_move_down s1 s2 n1 n2 : 
