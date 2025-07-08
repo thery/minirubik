@@ -1,5 +1,5 @@
-Require Import ZArith.
-Require Import List.
+From Stdlib Require Import ZArith.
+From Stdlib Require Import List.
 
 (*****************************************************************************)
 (*                                                                           *)

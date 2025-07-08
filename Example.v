@@ -1,7 +1,8 @@
 (*
 Require Import Int31 List BasicRubik Rubik31 Solver.
 *)
-Require Import PrimInt63 List BasicRubik Rubik63 Solver.
+From Stdlib Require Import PrimInt63 List.
+Require Import BasicRubik Rubik63 Solver.
 
 (* Just to compute the state *)
 Time Compute solve init_state.

@@ -1,4 +1,5 @@
-Require Import PrimInt63 Cyclic63 List BasicRubik.
+From Stdlib Require Import PrimInt63 Cyclic63 List.
+Require Import BasicRubik.
 
 (** Cubes positions. There are 7*6*5*4*3*2 positions.                        **)
 (** We code them as 6 * 5 * 4 * (3 * 3 * 7 = 63)                             **) 

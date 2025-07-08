@@ -1,7 +1,8 @@
 (*
 Require Import Int31 List BasicRubik Rubik31.
 *)
-Require Import PrimInt63 List BasicRubik Rubik63.
+From Stdlib Require Import PrimInt63 List.
+Require Import BasicRubik Rubik63.
 
 CoInductive val12 := Mval12: tc2 * tc2 -> val12.
 

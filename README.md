@@ -63,10 +63,10 @@ Other examples are given in the file [Example.v](https://github.com/thery/miniru
 - Author(s):
   - Laurent Théry
 - License: [MIT License](LICENSE)
-- Compatible Coq versions: 8.20 or later
+- Compatible Rocq/Coq versions: 9.0 or later
 - Additional dependencies:
   - [BigNums](https://github.com/coq/bignums)
-- Coq namespace: `minirubik`
+- Rocq/Coq namespace: `minirubik`
 - Related publication(s): none
 
 ## Building and installation instructions
