@@ -63,7 +63,7 @@ Other examples are given in the file [Example.v](https://github.com/thery/miniru
 - Author(s):
   - Laurent Théry
 - License: [MIT License](LICENSE)
-- Compatible Rocq/Coq versions: 9.0 or later
+- Compatible Rocq/Coq versions: 9.1 or later
 - Additional dependencies:
   - [BigNums](https://github.com/coq/bignums)
 - Rocq/Coq namespace: `minirubik`
