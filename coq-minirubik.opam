@@ -61,7 +61,7 @@ Other examples are given in the file [Example.v](https://github.com/thery/miniru
 build: [make "-j%{jobs}%"]
 install: [make "install"]
 depends: [
-  "coq" {(>= "9.!")}
+  "coq" {(>= "9.1")}
   "coq-bignums" 
 ]
 
